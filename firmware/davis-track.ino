@@ -105,30 +105,37 @@ bool decodeOurs(uint8_t *data, Reading &r) {
     return true;
 }
 
+// One JSON object per line, so a host-side driver can parse without regex.
+// Wind speed/direction ride along in every packet; the remaining field
+// depends on the sensor type in this transmission.
+//
+// Unverified scalings (rain rate, gust) are emitted as raw bytes under
+// explicitly "_raw" names, so nothing downstream mistakes them for
+// calibrated values and publishes them.
 void printReading(const uint8_t *data, const Reading &r, float rssi) {
-    Serial.print(F("ch=")); Serial.print(channel);
-    Serial.print(F(" rssi=")); Serial.print(rssi, 0);
-    Serial.print(F(" type=0x")); Serial.print(r.sensorType, HEX);
-    Serial.print(F(" batt=")); Serial.print(r.batteryLow ? F("LOW") : F("OK"));
-    Serial.print(F(" wind=")); Serial.print(r.windSpeedMph, 0);
-    Serial.print(F("mph@")); Serial.print(r.windDirDeg);
+    Serial.print(F("{\"type\":")); Serial.print(r.sensorType);
+    Serial.print(F(",\"ch\":"));   Serial.print(channel);
+    Serial.print(F(",\"rssi\":")); Serial.print(rssi, 0);
+    Serial.print(F(",\"battLow\":")); Serial.print(r.batteryLow ? 1 : 0);
+    Serial.print(F(",\"windSpeedMph\":")); Serial.print(r.windSpeedMph, 0);
+    Serial.print(F(",\"windDirDeg\":"));   Serial.print(r.windDirDeg);
 
     switch (r.sensorType) {
         case 0x8: { int16_t raw = (int16_t)(((uint16_t)data[3] << 8) | data[4]);
-                    Serial.print(F(" temp=")); Serial.print(raw / 160.0f, 1); Serial.print(F("F")); break; }
+                    Serial.print(F(",\"tempF\":")); Serial.print(raw / 160.0f, 1); break; }
         case 0xA: { uint16_t raw = (((uint16_t)data[4] >> 4) << 8) | data[3];
-                    Serial.print(F(" rh=")); Serial.print(raw / 10.0f, 1); Serial.print(F("%")); break; }
+                    Serial.print(F(",\"humidity\":")); Serial.print(raw / 10.0f, 1); break; }
         case 0x4: { uint16_t raw = (((uint16_t)data[3] << 8) | data[4]) >> 6;
-                    Serial.print(F(" uv=")); Serial.print(raw / 50.0f, 1); break; }
+                    Serial.print(F(",\"uv\":")); Serial.print(raw / 50.0f, 1); break; }
         case 0x6: { uint16_t raw = (((uint16_t)data[3] << 8) | data[4]) >> 6;
-                    Serial.print(F(" solar=")); Serial.print(raw * 1.757936f, 0); Serial.print(F("W/m2")); break; }
-        case 0xE:   Serial.print(F(" rainCount=")); Serial.print(data[3]); break;
-        case 0x5:   Serial.print(F(" rainRateRaw=")); Serial.print(data[3]); break;
-        case 0x9:   Serial.print(F(" gustRaw=")); Serial.print(data[3]); break;
-        case 0x2:   Serial.print(F(" supercapRaw=")); Serial.print(data[3]); break;
+                    Serial.print(F(",\"solarWm2\":")); Serial.print(raw * 1.757936f, 0); break; }
+        case 0xE:   Serial.print(F(",\"rainCount\":"));    Serial.print(data[3]); break;
+        case 0x5:   Serial.print(F(",\"rainRate_raw\":")); Serial.print(data[3]); break;
+        case 0x9:   Serial.print(F(",\"gust_raw\":"));     Serial.print(data[3]); break;
+        case 0x2:   Serial.print(F(",\"supercap_raw\":")); Serial.print(data[3]); break;
         default: break;
     }
-    Serial.println();
+    Serial.println('}');
 }
 
 void setup() {
@@ -152,7 +159,7 @@ void setup() {
     radio.setPacketReceivedAction(onPacketReceived);
 
     setChannel(ANCHOR_CHANNEL);
-    Serial.println(F("[track] waiting for a strong packet to lock onto..."));
+    Serial.println(F("# waiting for a strong packet to lock onto..."));
 }
 
 void loop() {
@@ -175,7 +182,7 @@ void loop() {
                 good++;
                 missStreak = 0;
                 nextSlotMs = now + (uint32_t)(SLOT_HALFMS / 2ULL);
-                if (!locked) { locked = true; Serial.println(F("[track] locked on")); }
+                if (!locked) { locked = true; Serial.println(F("# locked on")); }
                 printReading(data, r, rssi);
             }
             weak++;      // front-end bleed -- decodes fine but isn't a real visit
@@ -196,14 +203,14 @@ void loop() {
             locked = false;
             missStreak = 0;
             setChannel(ANCHOR_CHANNEL);
-            Serial.println(F("[track] lost lock, re-acquiring..."));
+            Serial.println(F("# lost lock, re-acquiring..."));
         }
     }
 
     static uint32_t lastReport = 0;
     if (now - lastReport > 30000) {
         lastReport = now;
-        Serial.print(F("[track] good=")); Serial.print(good);
+        Serial.print(F("# good=")); Serial.print(good);
         Serial.print(F(" bleed=")); Serial.print(weak);
         Serial.print(F(" junk=")); Serial.print(junk);
         Serial.print(F(" locked=")); Serial.println(locked ? 1 : 0);

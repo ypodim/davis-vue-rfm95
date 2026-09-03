@@ -23,6 +23,37 @@ final code, and the diagnostic sketches are kept so the measurements are repeata
 
 ---
 
+## System
+
+```mermaid
+flowchart TD
+    ISS["<b>Davis Vantage Vue ISS 6357</b><br/>outdoors · solar + supercap + CR123<br/>displayed ID 4 = wire ID 3"]
+    NB["neighbour's Davis station<br/>wire ID 0"]
+    F["<b>Feather RP2040 RFM95</b><br/>SX1276 in FSK mode + antenna<br/>davis-track.ino<br/>AFC · RSSI floor · CRC-16"]
+    PI["<b>Raspberry Pi</b><br/>weewx + user/davisrfm95.py<br/>units · accumulation · SQLite"]
+    WU["Weather Underground"]
+    MQ["Mosquitto MQTT broker"]
+    HA["Home Assistant"]
+    DEV["Linux desktop<br/>arduino-cli · logger.py<br/><i>build host only</i>"]
+
+    ISS -->|"915 MHz GFSK 19.2 kbps<br/>51-ch hop, +1/slot<br/>1 packet / 2.75 s"| F
+    NB -.->|"rejected: wrong ID,<br/>and ~-115 dBm"| F
+    F -->|"USB serial 115200<br/>JSON per line"| PI
+    PI -->|HTTPS| WU
+    PI -->|MQTT| MQ
+    MQ -->|auto-discovery| HA
+    DEV -.->|"UF2 via BOOTSEL"| F
+```
+
+The neighbour's station is shown because it is a real participant in the RF
+environment, not a curiosity: it transmits on the same default ID the Vue ships
+with, and mistaking it for the local station sent this project down a long dead
+end. The transmitter-ID filter and `RSSI_FLOOR` exist to exclude it.
+
+The desktop is a build host only and drops out once the Pi is running.
+
+---
+
 ## Hardware
 
 | Item | Notes |
