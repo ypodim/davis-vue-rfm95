@@ -158,7 +158,7 @@ hearing it on channel *c* means the next transmission is on *c+1*.
 
 ### ⚠️ `RSSI_FLOOR` must be changed when the station is mounted outdoors
 
-`RSSI_FLOOR` (default **−105 dBm**) exists because a transmitter sitting ~30 cm from the
+`RSSI_FLOOR` (default **−120 dBm**, i.e. effectively off) exists because a transmitter sitting ~30 cm from the
 receiver **bleeds through the front end on channels it is not using**, producing packets
 that decode perfectly but are ~40 dB down. Anchoring the schedule on those corrupts it.
 
@@ -170,11 +170,25 @@ This is not hypothetical — it was observed. With the floor at −95 dBm and th
 grew to nearly double the good count, because those discarded packets were real.
 Lowering the floor to −105 dBm restored **100% capture, 43 of 43 consecutive slots**.
 
-So: the floor must be re-tuned whenever the station moves. Measured reference points —
-close-range front-end bleed sits at −107 to −121 dBm, so −105 excludes it while
-tolerating a fairly weak signal. Once the ISS is mounted outdoors, check the reported
-RSSI and set the floor safely below it. If bleed has disappeared entirely (it is a
-near-field effect), the floor can go lower still.
+So: the floor must be re-tuned whenever the station moves. Measured reference points:
+
+| Station position | Real signal | Capture at −105 floor |
+|---|---|---|
+| ~30 cm (desk) | −64 to −80 dBm | 100% |
+| moved further | −81 to −99 dBm | ~36% (floor cutting in) |
+| moved again | −103 to −117 dBm | 0% — looked like total failure |
+
+At the last position almost every real packet is below −105, so the floor is now set to
+−120 (effectively off), restoring ~90% capture.
+
+Note the floor has stopped being useful as a discriminator: near-field bleed measured
+−107 to −121 dBm, which now **overlaps** the real signal, so no threshold could separate
+them. That is fine, because bleed is a near-field effect and disappears at distance — but
+it means the floor is only worth raising again if the station is very close.
+
+At −103 to −117 dBm the link is near the SX1276's sensitivity limit for this
+configuration (roughly −110 to −118 dBm), which accounts for the ~10% loss. Recovering
+that is an antenna/placement question, not a software one.
 
 ---
 
@@ -335,6 +349,17 @@ same FQBN as the main firmware.
 | [`07-hop-order.ino`](diagnostics/07-hop-order.ino) | Anchors a slot clock, then parks on each target channel for just over a full cycle to measure its slot position. | Established `slot = (channel − 26) mod 51`. Contains a known bug: an unsigned underflow makes the first target report `NO VISIT` immediately — ignore the first result. |
 | [`08-schedule-receiver.ino.template`](diagnostics/08-schedule-receiver.ino.template) | Schedule-following receiver driven by an explicit `SLOT_MAP[51]` table, with 3-way anchor phase disambiguation. | Superseded — once the order proved to be a simple +1 step, no lookup table was needed. Useful if another unit turns out to use a non-sequential order. |
 
+## Gotcha: the rain counter counts handling
+
+The tipping bucket registers when the unit is jostled. Across this project the counter
+moved 128 → 133 → 139 purely from being picked up and repositioned — about 0.11 in of
+rain that never fell.
+
+The driver rejects jumps above 20 tips as implausible, but smaller handling artifacts
+pass straight through and would be published as real rainfall. Restart the receiver
+after the station reaches its final position so the counter re-baselines, and do not
+enable a public uploader before then.
+
 ## Tools
 
 | Tool | Purpose |
@@ -350,6 +375,7 @@ Raw captures backing the claims above.
 |---|---|
 | `logs/final-tracking-success.log` | The working receiver: sequential channels, ~2.75 s spacing, full sensor sweep |
 | `logs/json-output-100pct-capture.log` | JSON output stream at 100% capture (43/43 consecutive slots) after tuning the RSSI floor |
+| `logs/after-move-weak-signal.log` | After relocating the station: −103 to −117 dBm, ~90% capture with the floor off |
 | `logs/parked-hit-timing.log` | 23 hits whose gaps are all exact multiples of 2750 ms; strong hits land on one residue mod 51 |
 | `logs/afc-first-contact.log` | First packets from the real station after enabling AFC |
 | `logs/control-battery-in.log`, `logs/control-battery-out.log` | The battery control test (inconclusive — supercap kept it running) |

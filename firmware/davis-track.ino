@@ -36,7 +36,7 @@ SX1276 radio = new Module(RFM95_CS, RFM95_INT, RFM95_RST, RFM95_DIO1);
 #define SLOT_HALFMS      5500ULL
 
 #define PRE_SLOT_MS      120     // retune this early so we're already listening
-#define RSSI_FLOOR      -105.0f  // below this it is front-end bleed, not a real visit
+#define RSSI_FLOOR      -120.0f  // below this it is front-end bleed, not a real visit
 #define ANCHOR_CHANNEL   26
 #define MAX_MISSES       30      // consecutive misses before re-acquiring
 
@@ -192,6 +192,19 @@ void loop() {
         radio.startReceive();
     }
 
+    // Heartbeat FIRST, and unconditionally: when unlocked this loop used to
+    // return early and print nothing at all, making a dead radio look
+    // identical to a station that is simply out of range.
+    static uint32_t lastReport = 0;
+    if (now - lastReport > 15000) {
+        lastReport = now;
+        Serial.print(F("# good=")); Serial.print(good);
+        Serial.print(F(" weak=")); Serial.print(weak);
+        Serial.print(F(" junk=")); Serial.print(junk);
+        Serial.print(F(" locked=")); Serial.print(locked ? 1 : 0);
+        Serial.print(F(" ch=")); Serial.println(channel);
+    }
+
     if (!locked) return;
 
     // Advance one channel per slot whether or not we heard anything, so we
@@ -207,12 +220,4 @@ void loop() {
         }
     }
 
-    static uint32_t lastReport = 0;
-    if (now - lastReport > 30000) {
-        lastReport = now;
-        Serial.print(F("# good=")); Serial.print(good);
-        Serial.print(F(" bleed=")); Serial.print(weak);
-        Serial.print(F(" junk=")); Serial.print(junk);
-        Serial.print(F(" locked=")); Serial.println(locked ? 1 : 0);
-    }
 }
