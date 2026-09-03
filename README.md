@@ -408,6 +408,22 @@ changes, the antenna is not doing its job at this frequency.
 |---|---|
 | [`tools/logger.py`](tools/logger.py) | Reliable serial capture with reconnect. Use instead of `arduino-cli monitor`, which yields nothing non-interactively. |
 | [`tools/make_map.py`](tools/make_map.py) | Parses survey output into a C `SLOT_MAP` array and validates the structure. Only needed for the table-driven approach. |
+| [`tools/rssi_survey.py`](tools/rssi_survey.py) | Measures link quality at a location: capture rate and RSSI distribution. Appends a row per run to `survey.csv` so placements can be ranked. |
+
+### Comparing locations
+
+```bash
+sudo python3 tools/rssi_survey.py --label "shelf by window" --seconds 180
+```
+
+Optimise **capture rate** until it reaches ~100%, then optimise **RSSI median** for
+margin — two locations can both show 100% today while only one survives rain, a closed
+door, or the station's final mounting position. Allow at least 120 s per run (the median
+is noisy on short samples) and remember that a receiver which has lost lock needs up to
+~140 s to re-acquire, so an empty run may just not have re-locked yet.
+
+Pass `--interval` if the station's transmitter ID is not 3; the slot interval is
+`(41 + wireID) / 16` seconds.
 
 ## Logs
 

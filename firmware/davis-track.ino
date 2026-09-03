@@ -19,6 +19,7 @@
 // transmission is on c+1.
 
 #include <RadioLib.h>
+#include <Adafruit_NeoPixel.h>
 
 #define RFM95_CS   16
 #define RFM95_INT  21
@@ -40,12 +41,21 @@ SX1276 radio = new Module(RFM95_CS, RFM95_INT, RFM95_RST, RFM95_DIO1);
 #define ANCHOR_CHANNEL   26
 #define MAX_MISSES       30      // consecutive misses before re-acquiring
 
-// Activity LED: one short blink per confirmed packet. Lets you tell
-// "receiving" from "hung" at a glance on a headless Pi, without plugging in
-// a laptop. Driven from a timestamp rather than delay() -- blocking here
-// would push the slot timer late and break the hop tracking that everything
-// else depends on.
-#define LED_BLINK_MS     40
+// Status indication. This board has two LEDs: a plain red one on GPIO13
+// (PIN_LED) and a NeoPixel RGB on GPIO4 (PIN_NEOPIXEL). The NeoPixel is used
+// as the primary indicator because colour can encode STATE, not just
+// activity, which is what you actually want on a headless Pi:
+//
+//     green flash  = packet received and decoded (one per ~2.75s when healthy)
+//     dim blue     = running but not locked -- searching for the station
+//     red          = radio init failed
+//
+// Both are driven from timestamps, never delay(). Blocking here would push
+// the slot timer late and break the hop tracking everything depends on.
+// NeoPixel show() briefly disables interrupts, but for a single pixel that
+// is ~30us -- far too short to disturb a 2750ms slot.
+#define LED_BLINK_MS     60
+#define PIXEL_BRIGHTNESS 30      // out of 255; these are very bright
 
 struct Reading {
     float windSpeedMph;
@@ -76,6 +86,12 @@ volatile bool packetFlag = false;
 void onPacketReceived() { packetFlag = true; }
 
 uint32_t ledOffAtMs = 0;   // 0 = LED idle
+Adafruit_NeoPixel pixel(1, PIN_NEOPIXEL, NEO_GRB + NEO_KHZ800);
+
+void pixelSet(uint8_t r, uint8_t g, uint8_t b) {
+    pixel.setPixelColor(0, pixel.Color(r, g, b));
+    pixel.show();
+}
 
 void setChannel(uint8_t ch) {
     channel = ch % NUM_CHANNELS;
@@ -149,11 +165,16 @@ void printReading(const uint8_t *data, const Reading &r, float rssi) {
 
 void setup() {
     Serial.begin(115200);
+    pixel.begin();
+    pixel.setBrightness(PIXEL_BRIGHTNESS);
+    pixelSet(0, 0, 20);            // dim blue: alive, not yet locked
+
     uint32_t t0 = millis();
     while (!Serial && millis() - t0 < 3000) {}
 
     int st = radio.beginFSK(channelFreqMHz[ANCHOR_CHANNEL], 19.2, 5.0, 25.0, 10, 4);
     if (st != RADIOLIB_ERR_NONE) {
+        pixelSet(60, 0, 0);        // red: radio init failed
         while (true) { Serial.print(F("Radio init failed, code ")); Serial.println(st); delay(2000); }
     }
     radio.setEncoding(RADIOLIB_ENCODING_NRZ);
@@ -181,6 +202,9 @@ void loop() {
     // millis() rollover at ~49 days.
     if (ledOffAtMs != 0 && (int32_t)(now - ledOffAtMs) >= 0) {
         digitalWrite(LED_BUILTIN, LOW);
+        // Back to the resting colour for whatever state we are in.
+        if (locked) pixelSet(0, 0, 0);      // locked: dark between packets
+        else        pixelSet(0, 0, 20);     // searching: dim blue
         ledOffAtMs = 0;
     }
 
@@ -203,6 +227,7 @@ void loop() {
                 nextSlotMs = now + (uint32_t)(SLOT_HALFMS / 2ULL);
                 if (!locked) { locked = true; Serial.println(F("# locked on")); }
                 digitalWrite(LED_BUILTIN, HIGH);
+                pixelSet(0, 60, 0);        // green: got a packet
                 ledOffAtMs = now + LED_BLINK_MS;
                 printReading(data, r, rssi);
             }
@@ -237,6 +262,7 @@ void loop() {
             locked = false;
             missStreak = 0;
             setChannel(ANCHOR_CHANNEL);
+            pixelSet(0, 0, 20);        // dim blue: searching again
             Serial.println(F("# lost lock, re-acquiring..."));
         }
     }

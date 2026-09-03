@@ -4,3 +4,5 @@ build/
 *.bin
 *.map
 __pycache__/
+tools/survey*.log
+tools/survey.csv
