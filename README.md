@@ -316,6 +316,7 @@ Raw captures backing the claims above.
 | `logs/wideband-sweep.log` | Band sweep showing the strong signal hopping across 902–928 MHz, peaking at −27.5 dBm |
 | `logs/eu-868-negative.log` | EU band ruled out |
 | `logs/failed-survey.log` | The survey built on the wrong model, stalling at 40/51 |
+| `logs/failed-survey-stall.log` | The same survey left running ~9 hours: 292 cycles, one new identification. What a wrong model costs. |
 | `logs/image-response-test.log` | Parked RSSI test: every reception ~−115 dBm, ruling out the image-response theory and revealing the signal was far too weak to be the desk station |
 | `logs/double-hop-failure.log` | The double-hop bug: locks onto one strong packet, then 30 consecutive misses |
 

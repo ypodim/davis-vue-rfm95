@@ -1,0 +1,13 @@
+# Excerpt from the failed survey's second run (survey2.log).
+# The full log is 1095 lines and contains exactly ONE new identification;
+# the remainder is 292 cycles (~9 hours) of identical heartbeats at 41/51.
+# The survey could not progress because it was built on a false model
+# (17 channels x 3 slots) inferred from a neighbour's station, and its
+# saturation rule made the remaining slots unreachable.
+
+1788414850.64 [found] slot 43 -> ch 49   (41/51)
+...
+1788446830.44 [survey] identified=41/51 cycle=291 good=10075 noise=10326
+1788446860.58 [survey] identified=41/51 cycle=291 good=10084 noise=10335
+1788446890.22 [survey] identified=41/51 cycle=292 good=10093 noise=10342
+1788446920.35 [survey] identified=41/51 cycle=292 good=10099 noise=10354
