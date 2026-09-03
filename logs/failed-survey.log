@@ -1,0 +1,139 @@
+   33.14 [survey] anchored. slot 0 -> ch 26. starting sweep.
+   33.14 [survey] identified=1/51 cycle=0 good=1 noise=22
+   63.27 [survey] identified=1/51 cycle=0 good=1 noise=37
+   79.34 [found] slot 18 -> ch 26   (2/51)
+   93.39 [survey] identified=2/51 cycle=0 good=2 noise=40
+  107.45 [found] slot 29 -> ch 26   (3/51)
+  123.02 [survey] identified=3/51 cycle=0 good=3 noise=47
+  138.08 [found] slot 41 -> ch 0   (4/51)
+  153.15 [survey] identified=4/51 cycle=0 good=4 noise=51
+  183.27 [survey] identified=4/51 cycle=1 good=5 noise=64
+  213.41 [survey] identified=4/51 cycle=1 good=6 noise=71
+  214.91 [found] slot 20 -> ch 0   (5/51)
+  243.03 [survey] identified=5/51 cycle=1 good=8 noise=76
+  256.08 [found] slot 36 -> ch 1   (6/51)
+  273.15 [survey] identified=6/51 cycle=1 good=9 noise=83
+  303.28 [survey] identified=6/51 cycle=2 good=10 noise=92
+  333.41 [survey] identified=6/51 cycle=2 good=10 noise=97
+  335.42 [found] slot 16 -> ch 1   (7/51)
+  351.00 [found] slot 22 -> ch 1   (8/51)
+  363.05 [survey] identified=8/51 cycle=2 good=14 noise=105
+  379.12 [found] slot 33 -> ch 2   (9/51)
+  393.18 [survey] identified=9/51 cycle=2 good=17 noise=113
+  423.32 [survey] identified=9/51 cycle=2 good=18 noise=120
+  450.94 [found] slot 10 -> ch 2   (10/51)
+  452.95 [survey] identified=10/51 cycle=3 good=20 noise=129
+  483.08 [survey] identified=10/51 cycle=3 good=24 noise=137
+  513.21 [survey] identified=10/51 cycle=3 good=26 noise=145
+  520.25 [found] slot 37 -> ch 5   (11/51)
+  543.34 [survey] identified=11/51 cycle=3 good=29 noise=155
+  550.88 [found] slot 49 -> ch 5   (12/51)
+  572.97 [survey] identified=12/51 cycle=4 good=31 noise=166
+  576.48 [found] slot 8 -> ch 5   (13/51)
+  584.01 [found] slot 11 -> ch 7   (14/51)
+  603.10 [survey] identified=14/51 cycle=4 good=36 noise=176
+  609.63 [found] slot 21 -> ch 7   (15/51)
+  633.23 [survey] identified=15/51 cycle=4 good=40 noise=184
+  663.36 [survey] identified=15/51 cycle=4 good=44 noise=189
+  678.93 [found] slot 48 -> ch 7   (16/51)
+  688.97 [found] slot 1 -> ch 12   (17/51)
+  692.99 [survey] identified=17/51 cycle=5 good=48 noise=197
+  723.12 [survey] identified=17/51 cycle=5 good=51 noise=203
+  753.26 [survey] identified=17/51 cycle=5 good=55 noise=207
+  763.31 [found] slot 30 -> ch 12   (18/51)
+  783.39 [survey] identified=18/51 cycle=5 good=60 noise=216
+  788.91 [found] slot 40 -> ch 12   (19/51)
+  813.01 [survey] identified=19/51 cycle=5 good=64 noise=221
+  843.14 [survey] identified=19/51 cycle=6 good=67 noise=227
+  873.28 [survey] identified=19/51 cycle=6 good=71 noise=233
+  881.32 [found] slot 25 -> ch 18   (20/51)
+  903.42 [survey] identified=20/51 cycle=6 good=75 noise=237
+  933.05 [survey] identified=20/51 cycle=6 good=79 noise=240
+  963.19 [survey] identified=20/51 cycle=7 good=83 noise=250
+  993.32 [survey] identified=20/51 cycle=7 good=87 noise=257
+ 1022.96 [survey] identified=20/51 cycle=7 good=93 noise=266
+ 1045.56 [found] slot 38 -> ch 20   (21/51)
+ 1053.09 [survey] identified=21/51 cycle=7 good=99 noise=271
+ 1083.22 [survey] identified=21/51 cycle=8 good=103 noise=276
+ 1113.37 [survey] identified=21/51 cycle=8 good=105 noise=287
+ 1143.00 [survey] identified=21/51 cycle=8 good=111 noise=297
+ 1173.14 [survey] identified=21/51 cycle=8 good=115 noise=308
+ 1186.20 [found] slot 42 -> ch 30   (22/51)
+ 1196.75 [found] slot 46 -> ch 30   (23/51)
+ 1203.28 [survey] identified=23/51 cycle=8 good=122 noise=315
+ 1224.89 [found] slot 6 -> ch 30   (24/51)
+ 1227.40 [found] slot 7 -> ch 33   (25/51)
+ 1233.43 [survey] identified=25/51 cycle=9 good=127 noise=326
+ 1248.00 [found] slot 15 -> ch 33   (26/51)
+ 1263.05 [survey] identified=26/51 cycle=9 good=134 noise=333
+ 1293.20 [survey] identified=26/51 cycle=9 good=138 noise=344
+ 1323.32 [survey] identified=26/51 cycle=9 good=145 noise=355
+ 1324.82 [found] slot 45 -> ch 33   (27/51)
+ 1329.84 [found] slot 47 -> ch 34   (28/51)
+ 1353.46 [survey] identified=28/51 cycle=10 good=152 noise=360
+ 1383.08 [survey] identified=28/51 cycle=10 good=159 noise=365
+ 1413.22 [survey] identified=28/51 cycle=10 good=163 noise=373
+ 1443.35 [survey] identified=28/51 cycle=10 good=170 noise=384
+ 1472.98 [survey] identified=28/51 cycle=11 good=178 noise=390
+ 1503.11 [survey] identified=28/51 cycle=11 good=184 noise=395
+ 1533.25 [survey] identified=28/51 cycle=11 good=190 noise=398
+ 1563.37 [survey] identified=28/51 cycle=11 good=194 noise=413
+ 1593.01 [survey] identified=28/51 cycle=11 good=200 noise=428
+ 1611.60 [found] slot 4 -> ch 45   (29/51)
+ 1623.15 [survey] identified=29/51 cycle=12 good=208 noise=433
+ 1645.25 [found] slot 17 -> ch 45   (30/51)
+ 1653.29 [survey] identified=30/51 cycle=12 good=215 noise=443
+ 1670.87 [found] slot 27 -> ch 45   (31/51)
+ 1683.43 [survey] identified=31/51 cycle=12 good=220 noise=454
+ 1713.06 [survey] identified=31/51 cycle=12 good=226 noise=462
+ 1743.20 [survey] identified=31/51 cycle=13 good=234 noise=468
+ 1762.79 [found] slot 12 -> ch 46   (32/51)
+ 1773.34 [survey] identified=32/51 cycle=13 good=241 noise=475
+ 1803.47 [survey] identified=32/51 cycle=13 good=247 noise=486
+ 1833.10 [survey] identified=32/51 cycle=13 good=253 noise=489
+ 1863.23 [survey] identified=32/51 cycle=14 good=262 noise=497
+ 1893.36 [survey] identified=32/51 cycle=14 good=268 noise=505
+ 1923.50 [survey] identified=32/51 cycle=14 good=275 noise=513
+ 1952.63 [found] slot 35 -> ch 4   (33/51)
+ 1953.13 [survey] identified=33/51 cycle=14 good=281 noise=525
+ 1983.25 [survey] identified=33/51 cycle=14 good=289 noise=535
+ 2013.38 [survey] identified=33/51 cycle=15 good=296 noise=539
+ 2043.02 [survey] identified=33/51 cycle=15 good=303 noise=546
+ 2073.15 [survey] identified=33/51 cycle=15 good=310 noise=555
+ 2103.28 [survey] identified=33/51 cycle=15 good=318 noise=562
+ 2133.42 [survey] identified=33/51 cycle=16 good=325 noise=569
+ 2163.05 [survey] identified=33/51 cycle=16 good=332 noise=581
+ 2193.18 [survey] identified=33/51 cycle=16 good=338 noise=586
+ 2223.33 [survey] identified=33/51 cycle=16 good=346 noise=590
+ 2253.46 [survey] identified=33/51 cycle=16 good=354 noise=600
+ 2259.99 [found] slot 2 -> ch 8   (34/51)
+ 2283.09 [survey] identified=34/51 cycle=17 good=363 noise=615
+ 2290.62 [found] slot 14 -> ch 8   (35/51)
+ 2313.23 [survey] identified=35/51 cycle=17 good=371 noise=622
+ 2341.86 [found] slot 34 -> ch 9   (36/51)
+ 2343.36 [survey] identified=36/51 cycle=17 good=376 noise=636
+ 2373.50 [survey] identified=36/51 cycle=17 good=385 noise=643
+ 2403.14 [survey] identified=36/51 cycle=18 good=393 noise=653
+ 2433.28 [survey] identified=36/51 cycle=18 good=402 noise=657
+ 2444.33 [found] slot 23 -> ch 9   (37/51)
+ 2463.42 [survey] identified=37/51 cycle=18 good=409 noise=667
+ 2493.05 [survey] identified=37/51 cycle=18 good=418 noise=677
+ 2523.17 [survey] identified=37/51 cycle=19 good=425 noise=689
+ 2529.20 [found] slot 5 -> ch 10   (38/51)
+ 2553.29 [survey] identified=38/51 cycle=19 good=434 noise=694
+ 2582.92 [found] slot 26 -> ch 10   (39/51)
+ 2583.42 [survey] identified=39/51 cycle=19 good=444 noise=698
+ 2613.05 [survey] identified=39/51 cycle=19 good=452 noise=699
+ 2643.19 [survey] identified=39/51 cycle=19 good=459 noise=703
+ 2673.33 [survey] identified=39/51 cycle=20 good=468 noise=719
+ 2703.46 [survey] identified=39/51 cycle=20 good=477 noise=722
+ 2733.09 [survey] identified=39/51 cycle=20 good=484 noise=730
+ 2763.21 [survey] identified=39/51 cycle=20 good=492 noise=742
+ 2793.35 [survey] identified=39/51 cycle=21 good=502 noise=745
+ 2823.48 [survey] identified=39/51 cycle=21 good=511 noise=751
+ 2853.11 [survey] identified=39/51 cycle=21 good=520 noise=760
+ 2857.13 [found] slot 31 -> ch 14   (40/51)
+ 2883.24 [survey] identified=40/51 cycle=21 good=528 noise=766
+ 2913.38 [survey] identified=40/51 cycle=22 good=536 noise=777
+ 2943.52 [survey] identified=40/51 cycle=22 good=545 noise=788
+ 2973.15 [survey] identified=40/51 cycle=22 good=553 noise=800

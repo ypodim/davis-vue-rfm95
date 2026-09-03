@@ -1,0 +1,7 @@
+   0.5 [track] waiting for a strong packet to lock onto...
+  72.8 [track] locked on
+  72.8 ch=26 rssi=-64 type=0x7 batt=OK wind=0mph@100
+  72.8 [track] good=1 bleed=1 junk=2 locked=1
+ 102.4 [track] good=1 bleed=1 junk=2 locked=1
+ 132.6 [track] good=1 bleed=1 junk=2 locked=1
+ 157.7 [track] lost lock, re-acquiring...

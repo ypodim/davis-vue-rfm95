@@ -313,9 +313,11 @@ Raw captures backing the claims above.
 | `logs/control-battery-in.log`, `logs/control-battery-out.log` | The battery control test (inconclusive — supercap kept it running) |
 | `logs/all-transmitter-ids.log` | All-ID capture showing only weak `id=0` traffic |
 | `logs/hop-order-results.log` | The three channel→slot measurements that established the +1 rule |
-| `logs/wideband-sweep-excerpt.log` | Band sweep showing the strong signal hopping across 902–928 MHz |
+| `logs/wideband-sweep.log` | Band sweep showing the strong signal hopping across 902–928 MHz, peaking at −27.5 dBm |
 | `logs/eu-868-negative.log` | EU band ruled out |
-| `logs/failed-survey-excerpt.log` | The survey built on the wrong model |
+| `logs/failed-survey.log` | The survey built on the wrong model, stalling at 40/51 |
+| `logs/image-response-test.log` | Parked RSSI test: every reception ~−115 dBm, ruling out the image-response theory and revealing the signal was far too weak to be the desk station |
+| `logs/double-hop-failure.log` | The double-hop bug: locks onto one strong packet, then 30 consecutive misses |
 
 Weather values in these logs come from the local station and, in the earlier captures,
 an anonymous nearby Davis unit broadcasting unencrypted on shared ISM spectrum.

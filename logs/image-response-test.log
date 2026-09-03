@@ -1,0 +1,15 @@
+   20.6 [rssi] good=0 noise=6
+   27.6 [hit] rssi=-115.0dBm type=0x3 gap=0ms  temp/raw=255,195
+   50.7 [rssi] good=1 noise=13
+   73.3 [hit] rssi=-118.0dBm type=0x5 gap=46126ms  temp/raw=255,115
+   80.9 [rssi] good=2 noise=25
+  110.5 [rssi] good=2 noise=34
+  140.6 [rssi] good=2 noise=41
+  158.2 [hit] rssi=-114.5dBm type=0x8 gap=84563ms  temp/raw=41,235
+  170.7 [rssi] good=3 noise=47
+  200.9 [rssi] good=3 noise=56
+  204.4 [hit] rssi=-115.0dBm type=0xE gap=46125ms  temp/raw=128,3
+  230.5 [rssi] good=4 noise=65
+  232.5 [hit] rssi=-118.0dBm type=0x3 gap=28187ms  temp/raw=255,195
+  260.6 [rssi] good=5 noise=74
+  288.7 [hit] rssi=-116.5dBm type=0x5 gap=56376ms  temp/raw=255,115
