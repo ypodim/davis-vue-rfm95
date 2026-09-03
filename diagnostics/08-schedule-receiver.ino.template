@@ -1,0 +1,238 @@
+// Davis Vantage Vue ISS receiver -- schedule-following mode.
+//
+// This is the payoff from the hop-sequence survey (see ../davis-survey).
+// Instead of parking on one frequency and catching ~1 packet per 44s, this
+// follows the station's actual transmit schedule and catches one every
+// 2.5625s -- a full sweep of every sensor type in about 51 seconds.
+//
+// How it works: transmissions sit on an exact 2562.5ms grid and the whole
+// pattern repeats every 51 slots. SLOT_MAP below records which frequency the
+// station uses in each of those 51 slots. We anchor the grid on a confirmed
+// packet, then retune to the right frequency just before each slot begins.
+//
+// SLOT_MAP is filled in from the survey output -- do not hand-edit.
+
+#include <RadioLib.h>
+
+#define RFM95_CS   16
+#define RFM95_INT  21   // DIO0
+#define RFM95_RST  17
+#define RFM95_DIO1 22
+
+SX1276 radio = new Module(RFM95_CS, RFM95_INT, RFM95_RST, RFM95_DIO1);
+
+#define TRANSMITTER_ID   0
+#define DAVIS_PACKET_LEN 10
+#define NUM_CHANNELS     51
+#define SLOTS_PER_CYCLE  51
+#define SLOTS_PER_CHAN   3         // slots each used frequency occupies
+#define SLOT_HALFMS      5125ULL   // 2562.5ms grid, in halves of a ms
+#define PRE_SLOT_MS      150       // retune this early so we're listening
+#define ANCHOR_CHANNEL   26        // known-good channel used to (re)acquire
+#define MAX_MISSES       20        // consecutive misses before re-acquiring
+
+struct Reading {
+    float windSpeedMph;
+    int windDirDeg;
+    uint8_t sensorType;
+    bool batteryLow;
+};
+
+static const float channelFreqMHz[NUM_CHANNELS] = {
+    911.413818f, 902.381897f, 911.915161f, 922.953186f, 914.926575f, 906.395874f,
+    925.964600f, 918.438354f, 908.904663f, 920.445374f, 913.420410f, 903.888062f,
+    916.933533f, 924.458923f, 910.409912f, 904.890625f, 915.929138f, 921.448364f,
+    907.399414f, 926.967651f, 912.919067f, 903.385376f, 917.434387f, 923.456299f,
+    909.406860f, 926.466370f, 905.894592f, 914.424316f, 919.441406f, 924.960205f,
+    902.884521f, 910.912109f, 921.949707f, 915.427856f, 906.898071f, 917.935669f,
+    927.469849f, 920.947083f, 908.402893f, 912.417358f, 918.940125f, 904.389343f,
+    923.957153f, 916.431824f, 909.909058f, 919.943604f, 905.391968f, 922.451904f,
+    907.901123f, 913.922607f, 925.462402f,
+};
+
+// @@SLOT_MAP@@   (generated from survey.log; -1 = still unknown)
+
+uint32_t epochMs = 0;
+bool     haveAnchor = false;
+uint64_t curSlot = 0;
+uint8_t  channel = 0;
+uint16_t missStreak = 0;
+uint32_t goodPackets = 0, falseTriggers = 0;
+
+// The anchor channel occupies 3 slots in the cycle, so a single packet heard
+// on it leaves the phase ambiguous 3 ways. Remember the candidates and the
+// moment we heard it, so a wrong guess can be corrected without waiting for
+// another packet.
+uint8_t  anchorSlots[SLOTS_PER_CHAN];
+uint8_t  anchorSlotCount = 0;
+uint8_t  anchorPhase = 0;
+uint32_t anchorHitMs = 0;
+#define PHASE_MISS_LIMIT 4     // misses before trying the next phase
+
+volatile bool packetFlag = false;
+void onPacketReceived() { packetFlag = true; }
+
+void setChannel(uint8_t ch) {
+    channel = ch % NUM_CHANNELS;
+    radio.standby();
+    radio.setFrequency(channelFreqMHz[channel]);
+    radio.startReceive();
+}
+
+uint64_t slotOf(uint32_t t)    { return ((uint64_t)(t - epochMs) * 2ULL) / SLOT_HALFMS; }
+uint32_t slotStart(uint64_t n) { return epochMs + (uint32_t)((n * SLOT_HALFMS) / 2ULL); }
+
+uint16_t crc16ccitt(const uint8_t *buf, uint8_t len) {
+    uint16_t crc = 0;
+    while (len--) {
+        crc ^= (uint16_t)(*buf++) << 8;
+        for (uint8_t i = 0; i < 8; i++)
+            crc = (crc & 0x8000) ? (crc << 1) ^ 0x1021 : (crc << 1);
+    }
+    return crc;
+}
+
+uint8_t reverseBits(uint8_t b) {
+    b = (b & 0xF0) >> 4 | (b & 0x0F) << 4;
+    b = (b & 0xCC) >> 2 | (b & 0x33) << 2;
+    b = (b & 0xAA) >> 1 | (b & 0x55) << 1;
+    return b;
+}
+
+bool decodeOurs(uint8_t *data, Reading &r) {
+    for (uint8_t i = 0; i < DAVIS_PACKET_LEN; i++) data[i] = reverseBits(data[i]);
+    uint16_t crcRx = ((uint16_t)data[6] << 8) | data[7];
+    if (crcRx != crc16ccitt(data, 6)) return false;
+    if ((data[0] & 0x07) != TRANSMITTER_ID) return false;
+
+    r.sensorType = data[0] >> 4;
+    r.batteryLow = (data[0] & 0x08) != 0;
+    r.windSpeedMph = data[1];
+    uint8_t dirRaw = data[2];
+    r.windDirDeg = (dirRaw == 0) ? 0 : (int)((dirRaw - 1) * 360.0f / 255.0f);
+    return true;
+}
+
+void printReading(const uint8_t *data, const Reading &r) {
+    Serial.print(F("ch=")); Serial.print(channel);
+    Serial.print(F(" type=0x")); Serial.print(r.sensorType, HEX);
+    Serial.print(F(" batt=")); Serial.print(r.batteryLow ? F("LOW") : F("OK"));
+    Serial.print(F(" wind=")); Serial.print(r.windSpeedMph, 0);
+    Serial.print(F("mph@")); Serial.print(r.windDirDeg);
+
+    switch (r.sensorType) {
+        case 0x8: { int16_t raw = (int16_t)(((uint16_t)data[3] << 8) | data[4]);
+                    Serial.print(F(" temp=")); Serial.print(raw / 160.0f, 1); Serial.print(F("F")); break; }
+        case 0xA: { uint16_t raw = (((uint16_t)data[4] >> 4) << 8) | data[3];
+                    Serial.print(F(" rh=")); Serial.print(raw / 10.0f, 1); Serial.print(F("%")); break; }
+        case 0x4: { uint16_t raw = (((uint16_t)data[3] << 8) | data[4]) >> 6;
+                    Serial.print(F(" uv=")); Serial.print(raw / 50.0f, 1); break; }
+        case 0x6: { uint16_t raw = (((uint16_t)data[3] << 8) | data[4]) >> 6;
+                    Serial.print(F(" solar=")); Serial.print(raw * 1.757936f, 0); Serial.print(F("W/m2")); break; }
+        case 0xE:   Serial.print(F(" rainCount=")); Serial.print(data[3]); break;
+        case 0x5:   Serial.print(F(" rainRateRaw=")); Serial.print(data[3]); break;
+        case 0x9:   Serial.print(F(" gustRaw=")); Serial.print(data[3]); break;
+        case 0x2:   Serial.print(F(" supercapRaw=")); Serial.print(data[3]); break;
+        default: break;
+    }
+    Serial.println();
+}
+
+void setup() {
+    Serial.begin(115200);
+    uint32_t t0 = millis();
+    while (!Serial && millis() - t0 < 3000) {}
+
+    int st = radio.beginFSK(channelFreqMHz[ANCHOR_CHANNEL], 19.2, 5.0, 25.0, 10, 4);
+    if (st != RADIOLIB_ERR_NONE) {
+        while (true) { Serial.print(F("Radio init failed, code ")); Serial.println(st); delay(2000); }
+    }
+    radio.setEncoding(RADIOLIB_ENCODING_NRZ);
+    radio.setDataShaping(RADIOLIB_SHAPING_0_5);
+    radio.setCRC(false);
+    uint8_t syncWord[] = {0xCB, 0x89};
+    radio.setSyncWord(syncWord, 2);
+    radio.fixedPacketLengthMode(DAVIS_PACKET_LEN);
+    radio.setPacketReceivedAction(onPacketReceived);
+
+    setChannel(ANCHOR_CHANNEL);
+    Serial.println(F("[rx] acquiring schedule..."));
+}
+
+void loop() {
+    uint32_t now = millis();
+
+    if (packetFlag) {
+        packetFlag = false;
+        uint8_t data[DAVIS_PACKET_LEN];
+        Reading r;
+        int st = radio.readData(data, DAVIS_PACKET_LEN);
+
+        if (st == RADIOLIB_ERR_NONE && decodeOurs(data, r)) {
+            goodPackets++;
+            missStreak = 0;
+
+            if (!haveAnchor) {
+                // This channel appears in 3 slots, so the phase is ambiguous.
+                // Collect the candidates and try the first; a wrong guess is
+                // corrected below without needing another packet.
+                anchorSlotCount = 0;
+                for (uint8_t s = 0; s < SLOTS_PER_CYCLE && anchorSlotCount < SLOTS_PER_CHAN; s++)
+                    if (SLOT_MAP[s] == (int8_t)channel) anchorSlots[anchorSlotCount++] = s;
+
+                if (anchorSlotCount) {
+                    anchorHitMs = now;
+                    anchorPhase = 0;
+                    curSlot = anchorSlots[0];
+                    epochMs = now - (uint32_t)((curSlot * SLOT_HALFMS) / 2ULL);
+                    haveAnchor = true;
+                    missStreak = 0;
+                    Serial.print(F("[rx] acquired, trying phase slot "));
+                    Serial.print(curSlot);
+                    Serial.print(F(" of ")); Serial.println(anchorSlotCount);
+                }
+            } else {
+                int32_t drift = (int32_t)(now - slotStart(curSlot));
+                if (drift > -500 && drift < 500) epochMs += drift / 4;
+            }
+            printReading(data, r);
+        } else {
+            falseTriggers++;
+            radio.startReceive();
+        }
+    }
+
+    if (!haveAnchor) return;
+
+    if ((int32_t)(now - (slotStart(curSlot + 1) - PRE_SLOT_MS)) >= 0) {
+        // A run of misses right after acquiring usually means we guessed the
+        // wrong one of the 3 possible phases -- shift to the next candidate
+        // before giving up entirely.
+        if (missStreak >= PHASE_MISS_LIMIT && anchorPhase + 1 < anchorSlotCount && goodPackets < 3) {
+            anchorPhase++;
+            curSlot = anchorSlots[anchorPhase];
+            epochMs = anchorHitMs - (uint32_t)((curSlot * SLOT_HALFMS) / 2ULL);
+            missStreak = 0;
+            Serial.print(F("[rx] wrong phase, trying slot ")); Serial.println(curSlot);
+            return;
+        }
+        if (missStreak++ > MAX_MISSES) {   // drifted off; re-acquire
+            haveAnchor = false;
+            missStreak = 0;
+            anchorPhase = 0;
+            setChannel(ANCHOR_CHANNEL);
+            Serial.println(F("[rx] lost schedule, re-acquiring..."));
+            return;
+        }
+        curSlot++;
+        int8_t ch = SLOT_MAP[curSlot % SLOTS_PER_CYCLE];
+        if (ch >= 0) setChannel((uint8_t)ch);   // unknown slot: stay put
+    }
+
+    static uint32_t lastReport = 0;
+    if (now - lastReport > 30000) {
+        lastReport = now;
+        Serial.print(F("[rx] good=")); Serial.print(goodPackets);
+        Serial.print(F(" noise=")); Serial.println(falseTriggers);
+    }
+}

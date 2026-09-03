@@ -1,0 +1,18 @@
+1788455072.94 [order] anchoring on ch 26, waiting for a strong packet...
+1788455099.55 [order] good=0 bleed=2
+1788455129.68 [order] good=0 bleed=3
+1788455149.27 [order] anchored: ch 26 = slot 0, rssi -71
+1788455149.27 [order] measuring ch 27 (1/8) ...
+1788455149.27 [RESULT] ch 27 -> NO VISIT (not in hop set?)
+1788455149.27 [order] measuring ch 25 (2/8) ...
+1788455159.81 [order] good=1 bleed=3
+1788455189.95 [order] good=1 bleed=3
+1788455219.57 [order] good=1 bleed=3
+1788455249.70 [order] good=1 bleed=3
+1788455279.83 [order] good=1 bleed=3
+1788455286.85 [RESULT] ch 25 -> slot 50  (abs 50, rssi -72)
+1788455286.85 [order] measuring ch 28 (3/8) ...
+1788455294.89 [RESULT] ch 28 -> slot 2  (abs 53, rssi -73)
+1788455294.89 [order] measuring ch 24 (4/8) ...
+1788455309.95 [order] good=3 bleed=3
+1788455339.57 [order] good=3 bleed=3

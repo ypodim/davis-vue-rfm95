@@ -1,0 +1,17 @@
+   0.5 [rssi] parked on ch 26 = 905.894592 MHz
+  27.6 [rssi] good=0 noise=5
+  35.2 [hit] id=0 rssi=-116.5dBm type=0x5 gap=0ms  temp/raw=255,115
+  45.2 [hit] id=0 rssi=-121.0dBm type=0x5 gap=10250ms  temp/raw=255,115
+  57.7 [rssi] good=2 noise=13
+  87.4 [rssi] good=2 noise=29
+  91.4 [hit] id=0 rssi=-117.0dBm type=0x9 gap=46125ms  temp/raw=0,3
+  24.6 [rssi] good=3 noise=41
+  52.7 [hit] id=0 rssi=-117.0dBm type=0xE gap=84563ms  temp/raw=128,3
+  54.2 [rssi] good=4 noise=44
+  84.4 [rssi] good=4 noise=57
+  98.9 [hit] id=0 rssi=-118.5dBm type=0x8 gap=46125ms  temp/raw=42,75
+ 114.5 [rssi] good=5 noise=63
+ 144.6 [rssi] good=5 noise=74
+ 174.2 [rssi] good=5 noise=82
+ 183.3 [hit] id=0 rssi=-113.5dBm type=0xA gap=84563ms  temp/raw=95,43
+ 204.3 [rssi] good=6 noise=86

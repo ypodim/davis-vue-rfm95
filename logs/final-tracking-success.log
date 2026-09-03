@@ -1,0 +1,66 @@
+   7.0 [track] locked on
+   7.0 ch=26 rssi=-69 type=0xE batt=OK wind=0mph@100 rainCount=128
+   9.5 ch=27 rssi=-73 type=0x5 batt=OK wind=0mph@100 rainRateRaw=255
+  12.6 ch=28 rssi=-69 type=0x8 batt=OK wind=0mph@100 temp=69.0F
+  15.1 ch=29 rssi=-72 type=0x7 batt=OK wind=0mph@100
+  18.1 ch=30 rssi=-74 type=0xE batt=OK wind=0mph@100 rainCount=128
+  20.6 ch=31 rssi=-72 type=0x5 batt=OK wind=0mph@100 rainRateRaw=255
+  23.6 ch=32 rssi=-74 type=0x8 batt=OK wind=0mph@100 temp=69.0F
+  26.1 ch=33 rssi=-71 type=0x3 batt=OK wind=0mph@100
+  27.1 [track] good=8 bleed=8 junk=0 locked=1
+  29.1 ch=34 rssi=-71 type=0xE batt=OK wind=0mph@100 rainCount=128
+  31.6 ch=35 rssi=-73 type=0x5 batt=OK wind=0mph@100 rainRateRaw=255
+  34.6 ch=36 rssi=-74 type=0x8 batt=OK wind=0mph@100 temp=69.0F
+  37.1 ch=37 rssi=-74 type=0x9 batt=OK wind=0mph@100 gustRaw=0
+  40.2 ch=38 rssi=-71 type=0xE batt=OK wind=0mph@100 rainCount=128
+  42.7 ch=39 rssi=-73 type=0x5 batt=OK wind=0mph@100 rainRateRaw=255
+  45.7 ch=40 rssi=-75 type=0x8 batt=OK wind=0mph@100 temp=69.0F
+  48.2 ch=41 rssi=-76 type=0xA batt=OK wind=0mph@100 rh=58.7%
+  51.2 ch=42 rssi=-75 type=0xE batt=OK wind=0mph@100 rainCount=128
+  53.7 ch=43 rssi=-70 type=0x5 batt=OK wind=0mph@100 rainRateRaw=255
+  56.7 ch=44 rssi=-74 type=0x8 batt=OK wind=0mph@100 temp=69.1F
+  57.2 [track] good=19 bleed=19 junk=0 locked=1
+  59.2 ch=45 rssi=-72 type=0x2 batt=OK wind=0mph@100 supercapRaw=77
+  61.7 ch=46 rssi=-73 type=0xE batt=OK wind=0mph@100 rainCount=128
+  64.8 ch=47 rssi=-72 type=0x5 batt=OK wind=0mph@100 rainRateRaw=255
+  67.3 ch=48 rssi=-75 type=0x8 batt=OK wind=0mph@100 temp=69.1F
+  70.3 ch=49 rssi=-71 type=0x7 batt=OK wind=0mph@100
+  72.8 ch=50 rssi=-70 type=0xE batt=OK wind=0mph@100 rainCount=128
+  75.8 ch=0 rssi=-70 type=0x5 batt=OK wind=0mph@100 rainRateRaw=255
+  78.3 ch=1 rssi=-71 type=0x8 batt=OK wind=0mph@100 temp=69.0F
+  81.3 ch=2 rssi=-78 type=0x3 batt=OK wind=0mph@100
+  83.8 ch=3 rssi=-74 type=0xE batt=OK wind=0mph@100 rainCount=128
+  86.8 ch=4 rssi=-72 type=0x5 batt=OK wind=0mph@100 rainRateRaw=255
+  87.3 [track] good=30 bleed=30 junk=0 locked=1
+  89.3 ch=5 rssi=-71 type=0x8 batt=OK wind=0mph@100 temp=69.1F
+  92.4 ch=6 rssi=-73 type=0x9 batt=OK wind=0mph@100 gustRaw=0
+  94.9 ch=7 rssi=-70 type=0xE batt=OK wind=0mph@100 rainCount=128
+  97.9 ch=8 rssi=-80 type=0x5 batt=OK wind=0mph@100 rainRateRaw=255
+ 100.4 ch=9 rssi=-71 type=0x8 batt=OK wind=0mph@100 temp=69.1F
+ 103.4 ch=10 rssi=-74 type=0xA batt=OK wind=0mph@100 rh=58.3%
+ 105.9 ch=11 rssi=-74 type=0xE batt=OK wind=0mph@100 rainCount=128
+ 108.9 ch=12 rssi=-75 type=0x5 batt=OK wind=0mph@100 rainRateRaw=255
+ 111.4 ch=13 rssi=-76 type=0x8 batt=OK wind=0mph@100 temp=69.1F
+ 114.4 ch=14 rssi=-70 type=0x2 batt=OK wind=0mph@100 supercapRaw=77
+ 117.0 ch=15 rssi=-74 type=0xE batt=OK wind=0mph@100 rainCount=128
+ 117.5 [track] good=41 bleed=41 junk=0 locked=1
+ 120.0 ch=16 rssi=-70 type=0x5 batt=OK wind=0mph@100 rainRateRaw=255
+ 122.5 ch=17 rssi=-71 type=0x8 batt=OK wind=0mph@100 temp=69.0F
+ 125.5 ch=18 rssi=-71 type=0x7 batt=OK wind=0mph@100
+ 128.0 ch=19 rssi=-68 type=0xE batt=OK wind=0mph@100 rainCount=128
+ 130.5 ch=20 rssi=-76 type=0x5 batt=OK wind=0mph@100 rainRateRaw=255
+ 133.5 ch=21 rssi=-68 type=0x8 batt=OK wind=0mph@100 temp=69.1F
+ 136.0 ch=22 rssi=-73 type=0x3 batt=OK wind=0mph@100
+ 139.0 ch=23 rssi=-71 type=0xE batt=OK wind=0mph@100 rainCount=128
+ 141.5 ch=24 rssi=-72 type=0x5 batt=OK wind=0mph@100 rainRateRaw=255
+ 144.6 ch=25 rssi=-74 type=0x8 batt=OK wind=0mph@100 temp=69.1F
+ 147.1 [track] good=51 bleed=51 junk=0 locked=1
+ 147.1 ch=26 rssi=-71 type=0x9 batt=OK wind=0mph@100 gustRaw=0
+ 150.1 ch=27 rssi=-70 type=0xE batt=OK wind=0mph@100 rainCount=128
+ 152.6 ch=28 rssi=-64 type=0x5 batt=OK wind=0mph@100 rainRateRaw=255
+ 155.6 ch=29 rssi=-72 type=0x8 batt=OK wind=0mph@100 temp=69.1F
+ 158.1 ch=30 rssi=-70 type=0xA batt=OK wind=0mph@100 rh=58.3%
+ 161.1 ch=31 rssi=-73 type=0xE batt=OK wind=0mph@100 rainCount=128
+ 163.6 ch=32 rssi=-73 type=0x5 batt=OK wind=0mph@100 rainRateRaw=255
+ 166.6 ch=33 rssi=-73 type=0x8 batt=OK wind=0mph@100 temp=69.1F
+ 169.2 ch=34 rssi=-77 type=0x2 batt=OK wind=0mph@100 supercapRaw=77
