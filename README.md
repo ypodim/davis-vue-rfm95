@@ -408,7 +408,48 @@ changes, the antenna is not doing its job at this frequency.
 |---|---|
 | [`tools/logger.py`](tools/logger.py) | Reliable serial capture with reconnect. Use instead of `arduino-cli monitor`, which yields nothing non-interactively. |
 | [`tools/make_map.py`](tools/make_map.py) | Parses survey output into a C `SLOT_MAP` array and validates the structure. Only needed for the table-driven approach. |
+| [`tools/survey_download.py`](tools/survey_download.py) | Downloads and analyses sessions recorded by the portable logger. |
 | [`tools/rssi_survey.py`](tools/rssi_survey.py) | Measures link quality at a location: capture rate and RSSI distribution. Appends a row per run to `survey.csv` so placements can be ranked. |
+
+### Portable site survey (battery powered)
+
+To compare locations away from the PC, flash
+[`firmware-survey/davis-survey-logger.ino`](firmware-survey/davis-survey-logger.ino).
+It records to the Feather's own flash, so the board can run on battery with nothing
+attached.
+
+```bash
+arduino-cli compile --fqbn rp2040:rp2040:adafruit_feather_rfm:flash=8388608_65536 \
+    --output-dir ./build firmware-survey/
+```
+
+The `flash=8388608_65536` option is required — it allocates the 64 KB LittleFS
+partition. The default layout has no filesystem and the logger will fail to store
+anything.
+
+At the location, watch the NeoPixel:
+
+| Colour | Meaning |
+|---|---|
+| **Blue** | Acquiring. Can take up to ~140 s — the station must hop onto the anchor channel. |
+| **Dim green**, bright flash per packet | Recording (3 minutes) |
+| **Purple** | Finished and written to flash. Safe to power off. |
+| **Orange** | Never acquired — nothing recorded. Too far, or blocked. |
+
+**Only power off on purple.** Packets are buffered in RAM and written to flash in a
+single operation when the session completes, so powering off during blue or green
+saves nothing. That design is deliberate: a LittleFS write blocks for milliseconds,
+which would push the slot timer late and cost the very packets being measured.
+
+Sessions accumulate, so several locations can be surveyed before returning. Then:
+
+```bash
+sudo python3 tools/survey_download.py            # list and analyse all sessions
+sudo python3 tools/survey_download.py --clear    # erase after downloading
+```
+
+Download **before** reflashing the normal firmware — that build uses a no-filesystem
+flash layout and will reclaim the partition.
 
 ### Comparing locations
 
