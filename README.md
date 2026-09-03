@@ -158,13 +158,23 @@ hearing it on channel *c* means the next transmission is on *c+1*.
 
 ### ⚠️ `RSSI_FLOOR` must be changed when the station is mounted outdoors
 
-`RSSI_FLOOR` (default **−95 dBm**) exists because a transmitter sitting ~30 cm from the
+`RSSI_FLOOR` (default **−105 dBm**) exists because a transmitter sitting ~30 cm from the
 receiver **bleeds through the front end on channels it is not using**, producing packets
 that decode perfectly but are ~40 dB down. Anchoring the schedule on those corrupts it.
 
-That bleed only happens at very close range. Once the ISS is mounted properly outdoors
-the real signal will weaken — possibly below −95 dBm — and the receiver would then
-**reject genuine packets**. Lower the floor (e.g. −110) once it is mounted.
+That bleed only happens at very close range. As the station moves further away the real
+signal weakens, and the floor starts **rejecting genuine packets** instead.
+
+This is not hypothetical — it was observed. With the floor at −95 dBm and the signal at
+−81 to −95 dBm, capture fell to ~36% (one packet per 7.6 s) while the "bleed" counter
+grew to nearly double the good count, because those discarded packets were real.
+Lowering the floor to −105 dBm restored **100% capture, 43 of 43 consecutive slots**.
+
+So: the floor must be re-tuned whenever the station moves. Measured reference points —
+close-range front-end bleed sits at −107 to −121 dBm, so −105 excludes it while
+tolerating a fairly weak signal. Once the ISS is mounted outdoors, check the reported
+RSSI and set the floor safely below it. If bleed has disappeared entirely (it is a
+near-field effect), the floor can go lower still.
 
 ---
 
@@ -339,6 +349,7 @@ Raw captures backing the claims above.
 | Log | Shows |
 |---|---|
 | `logs/final-tracking-success.log` | The working receiver: sequential channels, ~2.75 s spacing, full sensor sweep |
+| `logs/json-output-100pct-capture.log` | JSON output stream at 100% capture (43/43 consecutive slots) after tuning the RSSI floor |
 | `logs/parked-hit-timing.log` | 23 hits whose gaps are all exact multiples of 2750 ms; strong hits land on one residue mod 51 |
 | `logs/afc-first-contact.log` | First packets from the real station after enabling AFC |
 | `logs/control-battery-in.log`, `logs/control-battery-out.log` | The battery control test (inconclusive — supercap kept it running) |

@@ -36,7 +36,7 @@ SX1276 radio = new Module(RFM95_CS, RFM95_INT, RFM95_RST, RFM95_DIO1);
 #define SLOT_HALFMS      5500ULL
 
 #define PRE_SLOT_MS      120     // retune this early so we're already listening
-#define RSSI_FLOOR       -95.0f  // below this it's front-end bleed, not a real visit
+#define RSSI_FLOOR      -105.0f  // below this it is front-end bleed, not a real visit
 #define ANCHOR_CHANNEL   26
 #define MAX_MISSES       30      // consecutive misses before re-acquiring
 
