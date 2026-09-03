@@ -40,6 +40,13 @@ SX1276 radio = new Module(RFM95_CS, RFM95_INT, RFM95_RST, RFM95_DIO1);
 #define ANCHOR_CHANNEL   26
 #define MAX_MISSES       30      // consecutive misses before re-acquiring
 
+// Activity LED: one short blink per confirmed packet. Lets you tell
+// "receiving" from "hung" at a glance on a headless Pi, without plugging in
+// a laptop. Driven from a timestamp rather than delay() -- blocking here
+// would push the slot timer late and break the hop tracking that everything
+// else depends on.
+#define LED_BLINK_MS     40
+
 struct Reading {
     float windSpeedMph;
     int windDirDeg;
@@ -67,6 +74,8 @@ uint32_t good = 0, weak = 0, junk = 0;
 
 volatile bool packetFlag = false;
 void onPacketReceived() { packetFlag = true; }
+
+uint32_t ledOffAtMs = 0;   // 0 = LED idle
 
 void setChannel(uint8_t ch) {
     channel = ch % NUM_CHANNELS;
@@ -158,12 +167,22 @@ void setup() {
     radio.setAFCAGCTrigger(RADIOLIB_SX127X_RX_TRIGGER_PREAMBLE_DETECT);
     radio.setPacketReceivedAction(onPacketReceived);
 
+    pinMode(LED_BUILTIN, OUTPUT);
+    digitalWrite(LED_BUILTIN, LOW);
+
     setChannel(ANCHOR_CHANNEL);
     Serial.println(F("# waiting for a strong packet to lock onto..."));
 }
 
 void loop() {
     uint32_t now = millis();
+
+    // Non-blocking blink timeout. Signed comparison so it survives the
+    // millis() rollover at ~49 days.
+    if (ledOffAtMs != 0 && (int32_t)(now - ledOffAtMs) >= 0) {
+        digitalWrite(LED_BUILTIN, LOW);
+        ledOffAtMs = 0;
+    }
 
     if (packetFlag) {
         packetFlag = false;
@@ -183,6 +202,8 @@ void loop() {
                 missStreak = 0;
                 nextSlotMs = now + (uint32_t)(SLOT_HALFMS / 2ULL);
                 if (!locked) { locked = true; Serial.println(F("# locked on")); }
+                digitalWrite(LED_BUILTIN, HIGH);
+                ledOffAtMs = now + LED_BLINK_MS;
                 printReading(data, r, rssi);
             }
             weak++;      // front-end bleed -- decodes fine but isn't a real visit

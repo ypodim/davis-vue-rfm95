@@ -1,0 +1,82 @@
+   1.5 {"type":5,"ch":35,"rssi":-95,"battLow":0,"windSpeedMph":0,"windDirDeg":245,"rainRate_raw":255}
+   4.5 {"type":8,"ch":36,"rssi":-94,"battLow":0,"windSpeedMph":0,"windDirDeg":245,"tempF":75.3}
+   7.0 {"type":7,"ch":37,"rssi":-105,"battLow":0,"windSpeedMph":0,"windDirDeg":245}
+   8.5 # good=12 weak=12 junk=0 locked=1 ch=37
+  10.0 {"type":14,"ch":38,"rssi":-110,"battLow":0,"windSpeedMph":0,"windDirDeg":244,"rainCount":139}
+  12.5 {"type":5,"ch":39,"rssi":-107,"battLow":0,"windSpeedMph":0,"windDirDeg":244,"rainRate_raw":255}
+  15.6 {"type":8,"ch":40,"rssi":-98,"battLow":0,"windSpeedMph":0,"windDirDeg":254,"tempF":75.3}
+  18.1 {"type":3,"ch":41,"rssi":-96,"battLow":0,"windSpeedMph":0,"windDirDeg":252}
+  21.1 {"type":14,"ch":42,"rssi":-112,"battLow":0,"windSpeedMph":1,"windDirDeg":252,"rainCount":139}
+  23.6 # good=17 weak=17 junk=0 locked=1 ch=42
+  23.6 {"type":5,"ch":43,"rssi":-101,"battLow":0,"windSpeedMph":1,"windDirDeg":254,"rainRate_raw":255}
+  26.6 {"type":8,"ch":44,"rssi":-112,"battLow":0,"windSpeedMph":1,"windDirDeg":251,"tempF":75.3}
+  29.1 {"type":9,"ch":45,"rssi":-102,"battLow":0,"windSpeedMph":0,"windDirDeg":211,"gust_raw":1}
+  32.1 {"type":14,"ch":46,"rssi":-95,"battLow":0,"windSpeedMph":1,"windDirDeg":248,"rainCount":139}
+  34.6 {"type":5,"ch":47,"rssi":-110,"battLow":0,"windSpeedMph":1,"windDirDeg":252,"rainRate_raw":255}
+  37.1 {"type":8,"ch":48,"rssi":-107,"battLow":0,"windSpeedMph":1,"windDirDeg":259,"tempF":75.3}
+  38.1 # good=23 weak=23 junk=0 locked=1 ch=48
+  40.2 {"type":10,"ch":49,"rssi":-93,"battLow":0,"windSpeedMph":1,"windDirDeg":254,"humidity":56.6}
+  42.7 {"type":14,"ch":50,"rssi":-98,"battLow":0,"windSpeedMph":1,"windDirDeg":251,"rainCount":139}
+  45.7 {"type":5,"ch":0,"rssi":-106,"battLow":0,"windSpeedMph":1,"windDirDeg":251,"rainRate_raw":255}
+  48.2 {"type":8,"ch":1,"rssi":-99,"battLow":0,"windSpeedMph":1,"windDirDeg":251,"tempF":75.3}
+  51.2 {"type":2,"ch":2,"rssi":-105,"battLow":0,"windSpeedMph":0,"windDirDeg":251,"supercap_raw":212}
+  53.2 # good=28 weak=28 junk=0 locked=1 ch=2
+  53.7 {"type":14,"ch":3,"rssi":-105,"battLow":0,"windSpeedMph":0,"windDirDeg":251,"rainCount":139}
+  56.7 {"type":5,"ch":4,"rssi":-96,"battLow":0,"windSpeedMph":0,"windDirDeg":251,"rainRate_raw":255}
+  59.2 {"type":8,"ch":5,"rssi":-106,"battLow":0,"windSpeedMph":0,"windDirDeg":251,"tempF":75.2}
+  62.2 {"type":7,"ch":6,"rssi":-97,"battLow":0,"windSpeedMph":0,"windDirDeg":251}
+  64.7 {"type":14,"ch":7,"rssi":-99,"battLow":0,"windSpeedMph":0,"windDirDeg":251,"rainCount":139}
+  67.8 {"type":5,"ch":8,"rssi":-107,"battLow":0,"windSpeedMph":0,"windDirDeg":251,"rainRate_raw":255}
+  68.3 # good=34 weak=34 junk=0 locked=1 ch=8
+  70.3 {"type":8,"ch":9,"rssi":-103,"battLow":0,"windSpeedMph":0,"windDirDeg":251,"tempF":75.2}
+  73.3 {"type":3,"ch":10,"rssi":-110,"battLow":0,"windSpeedMph":0,"windDirDeg":251}
+  75.8 {"type":14,"ch":11,"rssi":-95,"battLow":0,"windSpeedMph":0,"windDirDeg":251,"rainCount":139}
+  78.8 {"type":5,"ch":12,"rssi":-96,"battLow":0,"windSpeedMph":0,"windDirDeg":251,"rainRate_raw":255}
+  81.3 {"type":8,"ch":13,"rssi":-96,"battLow":0,"windSpeedMph":0,"windDirDeg":251,"tempF":75.2}
+  83.3 # good=39 weak=39 junk=0 locked=1 ch=13
+  84.3 {"type":9,"ch":14,"rssi":-111,"battLow":0,"windSpeedMph":0,"windDirDeg":251,"gust_raw":1}
+  86.8 {"type":14,"ch":15,"rssi":-99,"battLow":0,"windSpeedMph":0,"windDirDeg":251,"rainCount":139}
+  89.8 {"type":5,"ch":16,"rssi":-95,"battLow":0,"windSpeedMph":0,"windDirDeg":251,"rainRate_raw":255}
+  92.3 {"type":8,"ch":17,"rssi":-109,"battLow":0,"windSpeedMph":0,"windDirDeg":251,"tempF":75.2}
+  95.4 {"type":10,"ch":18,"rssi":-108,"battLow":0,"windSpeedMph":0,"windDirDeg":251,"humidity":56.9}
+  97.9 {"type":14,"ch":19,"rssi":-95,"battLow":0,"windSpeedMph":0,"windDirDeg":251,"rainCount":139}
+  98.4 # good=45 weak=45 junk=0 locked=1 ch=19
+ 100.9 {"type":5,"ch":20,"rssi":-108,"battLow":0,"windSpeedMph":0,"windDirDeg":251,"rainRate_raw":255}
+ 103.4 {"type":8,"ch":21,"rssi":-94,"battLow":0,"windSpeedMph":0,"windDirDeg":251,"tempF":75.2}
+ 105.9 {"type":2,"ch":22,"rssi":-94,"battLow":0,"windSpeedMph":0,"windDirDeg":251,"supercap_raw":212}
+ 108.9 {"type":14,"ch":23,"rssi":-103,"battLow":0,"windSpeedMph":0,"windDirDeg":251,"rainCount":139}
+ 111.4 {"type":5,"ch":24,"rssi":-112,"battLow":0,"windSpeedMph":0,"windDirDeg":251,"rainRate_raw":255}
+ 113.4 # good=50 weak=50 junk=0 locked=1 ch=24
+ 114.4 {"type":8,"ch":25,"rssi":-99,"battLow":0,"windSpeedMph":1,"windDirDeg":251,"tempF":75.1}
+ 116.9 {"type":7,"ch":26,"rssi":-107,"battLow":0,"windSpeedMph":0,"windDirDeg":251}
+ 120.0 {"type":14,"ch":27,"rssi":-98,"battLow":0,"windSpeedMph":1,"windDirDeg":251,"rainCount":139}
+ 122.5 {"type":5,"ch":28,"rssi":-107,"battLow":0,"windSpeedMph":1,"windDirDeg":251,"rainRate_raw":255}
+ 125.5 {"type":8,"ch":29,"rssi":-99,"battLow":0,"windSpeedMph":1,"windDirDeg":255,"tempF":75.1}
+ 128.0 {"type":3,"ch":30,"rssi":-97,"battLow":0,"windSpeedMph":1,"windDirDeg":221}
+ 128.5 # good=56 weak=56 junk=0 locked=1 ch=30
+ 131.0 {"type":14,"ch":31,"rssi":-104,"battLow":0,"windSpeedMph":1,"windDirDeg":248,"rainCount":139}
+ 133.5 {"type":5,"ch":32,"rssi":-105,"battLow":0,"windSpeedMph":1,"windDirDeg":252,"rainRate_raw":255}
+ 136.5 {"type":8,"ch":33,"rssi":-101,"battLow":0,"windSpeedMph":1,"windDirDeg":251,"tempF":75.1}
+ 139.0 {"type":9,"ch":34,"rssi":-108,"battLow":0,"windSpeedMph":1,"windDirDeg":254,"gust_raw":1}
+ 142.0 {"type":14,"ch":35,"rssi":-96,"battLow":0,"windSpeedMph":1,"windDirDeg":252,"rainCount":139}
+ 143.5 # good=61 weak=61 junk=0 locked=1 ch=35
+ 144.5 {"type":5,"ch":36,"rssi":-95,"battLow":0,"windSpeedMph":0,"windDirDeg":252,"rainRate_raw":255}
+ 147.6 {"type":8,"ch":37,"rssi":-106,"battLow":0,"windSpeedMph":0,"windDirDeg":252,"tempF":75.1}
+ 150.1 {"type":10,"ch":38,"rssi":-105,"battLow":0,"windSpeedMph":0,"windDirDeg":252,"humidity":57.5}
+ 153.1 {"type":14,"ch":39,"rssi":-95,"battLow":0,"windSpeedMph":0,"windDirDeg":252,"rainCount":139}
+ 155.6 {"type":5,"ch":40,"rssi":-100,"battLow":0,"windSpeedMph":0,"windDirDeg":252,"rainRate_raw":255}
+ 158.6 # good=66 weak=66 junk=0 locked=1 ch=41
+ 158.6 {"type":8,"ch":41,"rssi":-94,"battLow":0,"windSpeedMph":1,"windDirDeg":252,"tempF":75.1}
+ 161.1 {"type":2,"ch":42,"rssi":-93,"battLow":0,"windSpeedMph":0,"windDirDeg":264,"supercap_raw":212}
+ 164.1 {"type":14,"ch":43,"rssi":-96,"battLow":0,"windSpeedMph":0,"windDirDeg":265,"rainCount":139}
+ 166.6 {"type":5,"ch":44,"rssi":-107,"battLow":0,"windSpeedMph":0,"windDirDeg":265,"rainRate_raw":255}
+ 169.6 {"type":8,"ch":45,"rssi":-106,"battLow":0,"windSpeedMph":1,"windDirDeg":252,"tempF":75.1}
+ 172.1 {"type":7,"ch":46,"rssi":-105,"battLow":0,"windSpeedMph":1,"windDirDeg":252}
+ 173.2 # good=72 weak=72 junk=0 locked=1 ch=46
+ 174.7 {"type":14,"ch":47,"rssi":-109,"battLow":0,"windSpeedMph":1,"windDirDeg":264,"rainCount":139}
+ 177.7 {"type":5,"ch":48,"rssi":-104,"battLow":0,"windSpeedMph":1,"windDirDeg":251,"rainRate_raw":255}
+ 180.2 {"type":8,"ch":49,"rssi":-107,"battLow":0,"windSpeedMph":1,"windDirDeg":268,"tempF":75.1}
+ 183.2 {"type":3,"ch":50,"rssi":-104,"battLow":0,"windSpeedMph":1,"windDirDeg":266}
+ 185.7 {"type":14,"ch":0,"rssi":-111,"battLow":0,"windSpeedMph":1,"windDirDeg":255,"rainCount":139}
+ 188.2 # good=77 weak=77 junk=0 locked=1 ch=0
+ 188.7 {"type":5,"ch":1,"rssi":-97,"battLow":0,"windSpeedMph":1,"windDirDeg":98,"rainRate_raw":255}

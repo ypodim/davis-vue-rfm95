@@ -360,6 +360,48 @@ pass straight through and would be published as real rainfall. Restart the recei
 after the station reaches its final position so the counter re-baselines, and do not
 enable a public uploader before then.
 
+## Receiving antenna — measured
+
+The single biggest performance factor, and worth measuring rather than assuming.
+All four configurations below were recorded at the same station position, so they
+are directly comparable.
+
+| Configuration | Median RSSI | Best | Worst | Capture |
+|---|---|---|---|---|
+| No antenna at all | −117 dBm | −109 | −120 | ~35% |
+| Adafruit 945 (2.4 GHz, 5 dBi) | −109 dBm | −103 | −117 | ~90% |
+| 78 mm wire, unsoldered | −107 dBm | −95 | −116 | ~100% |
+| **78 mm wire, soldered** | **−103 dBm** | **−93** | **−112** | **~99%** |
+
+**Use a 78 mm (≈3 in) solid-core wire soldered to the `ANT` pad.** It beat a 5 dBi
+commercial swivel antenna by 6 dB, and improved on no antenna at all by 14 dB.
+
+A hand-cut wire outperforming a commercial antenna is only possible if that antenna is
+badly off-band — which is the point: the 945 is a **2.4 GHz** antenna, roughly 2.6x off
+frequency for 915 MHz. Adafruit's [3340](https://www.adafruit.com/product/3340) is the
+900 MHz kit, and the two look nearly identical (both black RP-SMA swivel whips, both
+~200 mm). Check the markings, not the shape.
+
+Notes that matter as much as the wire:
+
+* **Polarization.** The ISS transmits vertically polarized when mounted upright, so the
+  receive wire must be straight and vertical. Cross-polarization costs 10–20 dB — more
+  than everything else here combined.
+* **Clearance.** A quarter-wave monopole works against the board ground plane. Keep the
+  wire clear of the PCB, USB cable and any metal; folding it back over the board
+  detunes it.
+* **Soldering matters.** Merely inserting the wire in the pad hole gave −107 median with
+  a wide spread (best −95, worst −116) — intermittent contact. Soldering moved the
+  median to −103 and lifted the worst case to −112.
+* **Counterpoise (optional).** The board's ground plane is small. A second 78 mm wire on
+  a `GND` pad, pointing opposite, approximates a dipole and can add several dB if more
+  margin is needed.
+
+Diagnostic trick: unscrew or remove the antenna and re-measure. If reception barely
+changes, the antenna is not doing its job at this frequency.
+
+---
+
 ## Tools
 
 | Tool | Purpose |
@@ -376,6 +418,8 @@ Raw captures backing the claims above.
 | `logs/final-tracking-success.log` | The working receiver: sequential channels, ~2.75 s spacing, full sensor sweep |
 | `logs/json-output-100pct-capture.log` | JSON output stream at 100% capture (43/43 consecutive slots) after tuning the RSSI floor |
 | `logs/after-move-weak-signal.log` | After relocating the station: −103 to −117 dBm, ~90% capture with the floor off |
+| `logs/antenna-none.log` | Baseline with no antenna connected at all (−117 median, ~35% capture) |
+| `logs/antenna-78mm-wire-soldered.log` | Final: soldered 78 mm quarter-wave wire (−103 median, ~99% capture) |
 | `logs/parked-hit-timing.log` | 23 hits whose gaps are all exact multiples of 2750 ms; strong hits land on one residue mod 51 |
 | `logs/afc-first-contact.log` | First packets from the real station after enabling AFC |
 | `logs/control-battery-in.log`, `logs/control-battery-out.log` | The battery control test (inconclusive — supercap kept it running) |
