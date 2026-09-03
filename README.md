@@ -349,6 +349,45 @@ same FQBN as the main firmware.
 | [`07-hop-order.ino`](diagnostics/07-hop-order.ino) | Anchors a slot clock, then parks on each target channel for just over a full cycle to measure its slot position. | Established `slot = (channel − 26) mod 51`. Contains a known bug: an unsigned underflow makes the first target report `NO VISIT` immediately — ignore the first result. |
 | [`08-schedule-receiver.ino.template`](diagnostics/08-schedule-receiver.ino.template) | Schedule-following receiver driven by an explicit `SLOT_MAP[51]` table, with 3-way anchor phase disambiguation. | Superseded — once the order proved to be a simple +1 step, no lookup table was needed. Useful if another unit turns out to use a non-sequential order. |
 
+## Home Assistant bridge
+
+[`bridge/davis_mqtt.py`](bridge/davis_mqtt.py) republishes the receiver's serial stream
+to MQTT using Home Assistant auto-discovery.
+
+```bash
+MQTT_USER=mqtt_user MQTT_PASSWORD=... \
+    python3 bridge/davis_mqtt.py --broker 192.168.1.100 --port-dev /dev/ttyACM0
+```
+
+Requires `python3-paho-mqtt` and `python3-serial`. Credentials come from the
+environment rather than the command line so they stay out of the process list.
+
+**It stores nothing on disk.** All state is in memory and Home Assistant's recorder
+keeps the history; the receiving host is a pass-through. A restart re-baselines and
+carries on.
+
+Entities published:
+
+| Entity | Notes |
+|---|---|
+| Temperature, Humidity | °F / % |
+| Wind Speed, Wind Direction | mph / degrees |
+| Rain Since Start | inches, `total_increasing` so restarts are handled |
+| Signal Strength, Packet Rate | diagnostic |
+| Battery Low | diagnostic binary sensor |
+
+`packet_rate` is the link-health number: ~21/min means every transmission is being
+caught (one per 2.75 s). A sustained drop means reception is degrading.
+
+Everything is published to **one merged state topic** rather than a topic per sensor.
+The ISS rotates through sensor types — each transmission carries wind plus exactly one
+other reading — so per-sensor topics would leave entities visibly stale between their
+turns in the rotation.
+
+`rainRate_raw`, `gust_raw` and `supercap_raw` are **not** published, because their
+scaling was never verified. An unverified number displayed as fact is worse than an
+absent one.
+
 ## Gotcha: the rain counter counts handling
 
 The tipping bucket registers when the unit is jostled. Across this project the counter
