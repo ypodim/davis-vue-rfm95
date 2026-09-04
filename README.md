@@ -388,6 +388,44 @@ turns in the rotation.
 scaling was never verified. An unverified number displayed as fact is worse than an
 absent one.
 
+Availability follows the **data**, not the process: `--stale-after` seconds without a
+packet (default 120) marks the device unavailable in HA, so an unplugged Feather or a
+dead station shows as such instead of freezing at its last reading. The MQTT last-will
+covers the process dying.
+
+### Remote site: central broker over TLS
+
+When the station lives somewhere other than Home Assistant — and both places are behind
+firewalls with nothing open inbound — the answer is a broker on a public host that both
+sides connect *out* to:
+
+```
+remote site:  Feather ─serial─ Pi ─davis_mqtt.py─►  mqtt.example.org:8883 (TLS, password, ACL)
+                                                            ▲
+home:         Home Assistant's Mosquitto ──bridge (outbound)┘
+```
+
+No SSH tunnels on the data path. Retained state on the central broker means HA catches
+up after an outage, and the remote site keeps publishing whether or not HA is up.
+
+* **Central broker**: [`bridge/central-broker.conf.example`](bridge/central-broker.conf.example)
+  — a TLS-only listener (no plaintext port at all), one password per site, ACLs so a site
+  can only write its own topics plus discovery. Certificates from Let's Encrypt; a certbot
+  deploy hook copies renewals to where the unprivileged `mosquitto` user can read them.
+* **Home Assistant side**: [`bridge/ha-mosquitto-bridge.conf.example`](bridge/ha-mosquitto-bridge.conf.example)
+  — goes in `/share/mosquitto/` with the official Mosquitto add-on's `customize` option
+  enabled. Discovery messages published at the remote site arrive via the bridge and the
+  station simply appears as another device.
+* **Remote site**: [`bridge/davis-mqtt.service`](bridge/davis-mqtt.service) +
+  [`bridge/davis-mqtt.env.example`](bridge/davis-mqtt.env.example). The env file holds
+  credentials and the site's names (`DAVIS_NODE`, `DAVIS_TOPIC_BASE`, `DAVIS_DEVICE_NAME`)
+  so that nothing site-specific lives in this repository. Enable with
+  `systemctl enable --now davis-mqtt@<user>`.
+
+Test the whole chain before the hardware arrives by feeding the bridge a fake serial
+port: [`tools/fake_feather.py`](tools/fake_feather.py) replays a recorded log through a
+pty.
+
 ## Gotcha: the rain counter counts handling
 
 The tipping bucket registers when the unit is jostled. Across this project the counter

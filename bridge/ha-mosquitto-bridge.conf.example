@@ -1,0 +1,35 @@
+# Home Assistant's Mosquitto add-on -> central broker bridge.
+#
+# Install: copy to /share/mosquitto/bridge.conf on the HA host, then in the
+# Mosquitto add-on configuration set
+#     customize:
+#       active: true
+#       folder: mosquitto
+# and restart the add-on. The bridge is outbound only, so nothing needs to be
+# opened on the home firewall.
+
+connection central
+address mqtt.example.org:8883
+
+# Verify the broker against the public CA bundle inside the add-on container.
+bridge_cafile /etc/ssl/certs/ca-certificates.crt
+bridge_insecure false
+bridge_tls_version tlsv1.2
+
+remote_username ha-bridge
+remote_password change-me
+
+# Keep the subscription alive across drops so nothing is missed while the
+# WAN link flaps; reconnect with backoff.
+cleansession false
+start_type automatic
+restart_timeout 5 60
+try_private true
+# Report bridge state to local $SYS only; the remote ACL does not allow $SYS.
+notifications true
+notifications_local_only true
+
+# Pull the remote site's state and its HA discovery documents. Use "both"
+# instead of "in" if the remote site should also see home's topics one day.
+topic site-a/# in 0
+topic homeassistant/# in 0

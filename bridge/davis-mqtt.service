@@ -1,0 +1,27 @@
+[Unit]
+Description=Davis Vantage Vue serial -> MQTT bridge
+# The script tolerates both a missing broker and a missing Feather, so this
+# only needs the network to exist, not any particular device.
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=%i
+# Credentials and site naming live here, never on the command line.
+EnvironmentFile=/etc/davis-mqtt.env
+ExecStart=/usr/bin/python3 /home/%i/ws/davis-vue-rfm95/bridge/davis_mqtt.py
+Restart=always
+RestartSec=10
+# Unbuffered so journalctl -f shows lines as they happen.
+Environment=PYTHONUNBUFFERED=1
+
+# Hardening: the process needs the serial device and outbound network, nothing else.
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=read-only
+PrivateTmp=true
+SupplementaryGroups=dialout
+
+[Install]
+WantedBy=multi-user.target

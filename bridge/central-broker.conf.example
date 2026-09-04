@@ -1,0 +1,43 @@
+# Mosquitto 2.x drop-in for a central, internet-facing broker.
+# Install as /etc/mosquitto/conf.d/tls.conf on the public host.
+#
+# Only a TLS listener is declared, so no plaintext port is ever bound.
+# (Do not also set persistence here -- the Debian/Ubuntu base config does,
+# and mosquitto refuses duplicate settings.)
+
+listener 8883 0.0.0.0
+certfile /etc/mosquitto/certs/fullchain.pem
+keyfile  /etc/mosquitto/certs/privkey.pem
+tls_version tlsv1.2
+
+allow_anonymous false
+# create users with: mosquitto_passwd -b /etc/mosquitto/passwd <user> <pass>
+password_file /etc/mosquitto/passwd
+acl_file /etc/mosquitto/acl
+
+max_inflight_messages 100
+message_size_limit 65536
+
+# --- /etc/mosquitto/acl -------------------------------------------------
+# A site may write its own state and HA discovery documents, nothing else.
+# The Home Assistant bridge user mirrors both.
+#
+#   user site-a
+#   topic readwrite site-a/#
+#   topic write homeassistant/#
+#
+#   user ha-bridge
+#   topic readwrite site-a/#
+#   topic readwrite homeassistant/#
+
+# --- /etc/letsencrypt/renewal-hooks/deploy/mosquitto.sh ------------------
+# certbot's live/ directory is root-only; copy renewals somewhere mosquitto
+# can read and restart it. chmod 755 the hook and run it once by hand.
+#
+#   #!/bin/bash
+#   set -e
+#   SRC=/etc/letsencrypt/live/mqtt.example.org
+#   DST=/etc/mosquitto/certs          # install -d -o mosquitto -g mosquitto -m 750
+#   install -o mosquitto -g mosquitto -m 640 "$SRC/fullchain.pem" "$DST/fullchain.pem"
+#   install -o mosquitto -g mosquitto -m 640 "$SRC/privkey.pem"   "$DST/privkey.pem"
+#   systemctl restart mosquitto
